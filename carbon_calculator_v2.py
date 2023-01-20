@@ -2,13 +2,8 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import pickle
-import math
 import matplotlib.pyplot as plt
-import os
-#import pdfkit
 
-fileDir = 'C:\Python\Deploy'
-#energy_model = pickle.load(open(file3, 'rb'))
 uFile = 'Thermal_Calcs_DF.sav'
 dfU = pd.read_pickle(uFile)
 

@@ -11,11 +11,10 @@ import os
 fileDir = 'C:\Python\Deploy'
 #energy_model = pickle.load(open(file3, 'rb'))
 uFile = 'Thermal_Calcs_DF.sav'
-#dfU = pd.read_pickle(open(os.path.join(fileDir,uFile)))
-dfU = pd.read_pickle(os.path.join(fileDir,uFile))
+dfU = pd.read_pickle(uFile)
 
 pFile = 'Product_DF_v2.sav'
-dfP = pd.read_pickle(os.path.join(fileDir,pFile))
+dfP = pd.read_pickle(pFile)
 
 #frames = dfP.columns.values.tolist()
 #frames[0] = 'Generic product'
@@ -26,31 +25,31 @@ states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
        'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
 
 wFile = 'Weather_Cities_DF.sav'
-dfW = pd.read_pickle(os.path.join(fileDir,wFile))
+dfW = pd.read_pickle(wFile)
 #st.dataframe(dfW)
 
 def run_calc(dfW, dfP):
 
     file1 = 'gas_model3.sav'
-    gas_model = pickle.load(open(os.path.join(fileDir,file1), 'rb'))
+    gas_model = pickle.load(open(file1, 'rb'))
 
     file2 = 'elec_model3.sav'
-    elec_model = pickle.load(open(os.path.join(fileDir,file2), 'rb'))
+    elec_model = pickle.load(open(file2, 'rb'))
 
     file3 = 'elec_model_all_building3.sav'
-    elec_blg_model = pickle.load(open(os.path.join(fileDir,file3), 'rb'))
+    elec_blg_model = pickle.load(open(file3, 'rb'))
 
     file4 = 'gas_model_all_building3.sav'
-    gas_blg_model = pickle.load(open(os.path.join(fileDir,file4), 'rb'))
+    gas_blg_model = pickle.load(open(file4, 'rb'))
 
     dFile = 'Deploy_Weather_DF2.sav'
-    df = pd.read_pickle(os.path.join(fileDir,dFile))
+    df = pd.read_pickle(dFile)
 
     cFile = 'Energy_Rates_DF.sav'
-    dfC = pd.read_pickle(os.path.join(fileDir,cFile))
+    dfC = pd.read_pickle(cFile)
 
     bFile = 'Building_DF.sav'
-    dfB = pd.read_pickle(os.path.join(fileDir,bFile))
+    dfB = pd.read_pickle(bFile)
 
     wid = int(dfW['Weather ID'].loc[(dfW['City']) == st.session_state.city])
     #file3 = 'energy_model.sav'

@@ -61,7 +61,7 @@ def run_calc(dfW, dfP):
     #x = [area, blg, flr, wwr, u_val1, shgc, loc]
     #---floor to floor height [m]---
     ftfh = 4
-    side = math.sqrt(area/flr)
+    side = (area/flr)**(1/2)
     height = flr*4
     wall_area = 4*height*side
     volume = height*side**2

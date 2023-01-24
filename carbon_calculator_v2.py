@@ -213,7 +213,7 @@ def run_calc(dfW, dfP):
         frame_gwp2 = float(dfP['kgCO2/kg'].loc[(dfP['Product name']==st.session_state.prod2)])
         em_carbon2 = gc2 + frame_dens2*frame_gwp2
 
-    #---average energy to carbon factor [kgCO2/MWh]---
+  #---average energy to carbon factor [kgCO2/MWh]---
     cf = 400
     em_energy1 = em_carbon1/cf*1000
     em_energy2 = em_carbon2/cf*1000
@@ -261,6 +261,7 @@ def run_calc(dfW, dfP):
             ax1.bar_label(bar1b, fmt ='%5.0f', padding=1)
             ax1.set_ylabel(ylabel='Carbon Emissions (kgCO2/m²)',fontsize=fs)
             ax1.tick_params(axis='y', which='major', labelsize=fs)
+            ax1.axhline(0, color='black', lw=1)
 
             #ax2(figsize = (2,2))
 
@@ -285,6 +286,7 @@ def run_calc(dfW, dfP):
             ax2.set_ylabel(ylabel='Carbon Emissions (kgCO2/m²)',fontsize=fs)
             ax2.bar_label(bar2a, fmt ='%5.0f', padding=1)
             ax2.bar_label(bar2b, fmt ='%5.0f', padding=1)
+            ax2.axhline(0, color='black', lw=1)
             st.pyplot(fig)
 
         # col1edge, col1, col2, colmid, col3, col4, col2edge = st.columns((1, 3, 3, 1, 3, 3, 1))
@@ -374,6 +376,8 @@ def run_calc(dfW, dfP):
             ax1.set_title(label=str(st.session_state.prod1))
             #st.pyplot(fig)
             ax1.legend(labels1, loc = 'upper left', fontsize = 4)
+            
+            
 
             #ax2(figsize = (2,2))
             pie_data2 = np.array([em_carbon2,op_carbon2])
@@ -396,13 +400,17 @@ def run_calc(dfW, dfP):
                     c1[i] = c1[i-1] + op_annual1
                     c2[i] = c2[i-1] + op_annual2
 
-            fig3, ax3 = plt.subplots()
+            fig3, ax3 = plt.subplots(figsize = (10,5), dpi = 300)
+            fs3 = 12
             labels3 = [st.session_state.prod1, st.session_state.prod2]
             ax3.plot(t, c1, linewidth=2.0, color = colors[0])
             ax3.plot(t, c2, linewidth=2.0, color = colors[1])
-            ax3.set_xlabel('Time (yrs)')
-            ax3.set_ylabel('Cumulative carbon (kgCO2/m²)')
-            ax3.legend(labels3)
+            ax3.set_xlabel('Time (yrs)', fontsize=fs3)
+            ax3.set_ylabel('Cumulative carbon (kgCO2/m²)', fontsize=fs3)
+            ax3.legend(labels3, fontsize=(fs3-2))
+            #ax1.set_ylabel(ylabel='Carbon Emissions (kgCO2/m²)',fontsize=fs)
+            ax3.tick_params(axis='both', which='major', labelsize=fs3)
+            #ax3.tick_params(axis='y', which='major', labelsize=fs)
             
             #ax3.set(xlim=(0, 8), xticks=np.arange(1, 8),
             #ylim=(0, 8), yticks=np.arange(1, 8))
@@ -416,6 +424,65 @@ def run_calc(dfW, dfP):
     st.text("")
     
     with st.expander(label='',expanded=False):
+        fs = 6
+        rot = 45
+        bar4_y1 = np.array([annual_kwh1,annual_kwh2])
+        colors = ['#69A761', '#617165','#85A993','#8C9078']
+        bar_labels4 = [str(st.session_state.prod1), str(st.session_state.prod2)]
+        labels1 = ["Embodied Carbon", "Operational Carbon"]
+        x_axis4 = np.arange(2)
+        col1, col2, col3,= st.columns([1,5,1])
+        with col2:
+            fig4, (ax4, ax5) = plt.subplots(1, 2, figsize = (10,5), dpi=300)
+            #fig.tight_layout(pad=5)
+            fig4.subplots_adjust(left=0.3,
+                bottom=0.2,
+                right=0.8,
+                top=0.7,
+                wspace=0.4,
+                hspace=0.8)
+            #fig, (ax1,ax2) = plt.subplots(1, 2)
+            #ax1(figsize = (2,2))
+            #ax1 = plt.subplot2grid((1,2),(0,0))
+            plt.rcParams['font.size'] = fs
+            bar4a = ax4.bar(x_axis4, bar4_y1, 0.4, color=colors[0])
+            #bar5b = ax1.bar(x_axis4 + 0.2, bar1_y2, 0.4, color=colors[1], label=str(st.session_state.prod2))
+            #ax1.xticks(x_axis1 + 0.2,bar_labels1)
+            ax4.set_xticks(x_axis4, minor=False)
+            ax4.set_xticklabels(bar_labels4, fontsize=fs, rotation=rot)
+            #ax1.legend(fontsize=(fs-2))
+            ax4.bar_label(bar4a, fmt ='%5.0f', padding=1)
+            #ax4.bar_label(bar4b, fmt ='%5.0f', padding=1)
+            ax4.set_ylabel(ylabel='Annual energy [kWh/m²]',fontsize=fs)
+            ax4.tick_params(axis='y', which='major', labelsize=fs)
+            ax4.axhline(0, color='black', lw=1)
+
+            #ax2(figsize = (2,2))
+
+            bar5_y1 = np.array([annual_cost1,annual_cost2])
+            #bar2_y2 = np.array([elec_carbon2,gas_carbon2])
+            bar_labels5 = [str(st.session_state.prod1), str(st.session_state.prod2)]
+            x_axis5 = np.arange(2)
+            #col1edge, col1, colmid, col2, col2edge = st.columns((1, 3, 1, 3, 1))
+            #fig, (ax1,ax2) = plt.subplots(1, 2)
+            #ax1(figsize = (2,2))
+            #ax1 = plt.subplot2grid((1,2),(0,0))
+            bar5a = ax5.bar(x_axis5, bar5_y1, 0.4, color=colors[2])
+            #bar2b = ax2.bar(x_axis2 + 0.2, bar2_y2, 0.4, color=colors[3], label=str(st.session_state.prod2))
+            #ax1.xticks(x_axis1 + 0.2,bar_labels1)
+            ax5.set_xticks(x_axis5, minor=False)
+            ax5.set_xticklabels(bar_labels5, fontsize=fs, rotation=rot)
+            #ax1.xlabel("Year")
+            #ax1.ylabel("Number of people voted")
+            #ax1.title("Number of people voted in each year")
+            ax5.legend(fontsize=(fs-2))
+            ax5.tick_params(axis='y', which='major', labelsize=fs)
+            ax5.set_ylabel(ylabel='Annual Operating Cost [$/ft²]',fontsize=fs)
+            ax5.bar_label(bar5a, fmt ='%5.0f', padding=1)
+            ax5.axhline(0, color='black', lw=1)
+            #ax5.bar_label(bar2b, fmt ='%5.0f', padding=1)
+            st.pyplot(fig4)
+
         col1edge, col1, colmid, col3, col2edge = st.columns((2, 3, 1, 3, 2))
         col1.subheader(str(st.session_state.prod1))
         if st.session_state.win2:
@@ -449,13 +516,46 @@ def run_calc(dfW, dfP):
     st.header('Payback Period and Return on Investment')
     st.text("")
     with st.expander(label='', expanded=False):
+        epb = (em_energy2-em_energy1)/(annual_kwh1-annual_kwh2)
+        cpb =  (em_carbon2-em_carbon1)/(op_annual1-op_annual2)
+        fpb = float(st.session_state.cost)/(annual_cost1-annual_cost2)
+
+        fs = 6
+        rot = 45
+        bar6_y1 = np.array([epb,cpb, fpb])
+        colors = ['#69A761', '#617165','#85A993','#8C9078']
+        bar_labels6 = ['Energy', 'Carbon', 'Financial']
+        x_axis6 = np.arange(3)
+        col1, col2, col3,= st.columns([1,5,1])
+        with col2:
+            fig6, ax6 = plt.subplots(figsize = (10,5), dpi=300)
+            #fig.tight_layout(pad=5)
+            fig6.subplots_adjust(left=0.3,
+                bottom=0.2,
+                right=0.8,
+                top=0.7,
+                wspace=0.4,
+                hspace=0.8)
+            
+            plt.rcParams['font.size'] = fs
+            bar6a = ax6.bar(x_axis6, bar6_y1, 0.4, color=colors[0])
+            
+            ax6.set_xticks(x_axis6, minor=False)
+            ax6.set_xticklabels(bar_labels6, fontsize=fs, rotation=rot)
+            ax6.bar_label(bar6a, fmt ='%5.0f', padding=1)
+            ax6.set_ylabel(ylabel='Payback (yrs)',fontsize=fs)
+            ax6.tick_params(axis='y', which='major', labelsize=fs)
+            ax6.axhline(0, color='black', lw=1)
+
+            st.pyplot(fig6)
+
         col1edge, col1, col2, col3, col2edge = st.columns((1, 4, 4, 4, 1))
         col1.subheader('ENERGY')
         col2.subheader('CARBON')
         col3.subheader('FINANCIAL')
-        col1.metric('Payback Period (yrs)',"{:.2f}".format((em_energy2-em_energy1)/(annual_kwh1-annual_kwh2)))
-        col2.metric('Payback Period (yrs)',"{:.2f}".format((em_carbon2-em_carbon1)/(op_annual1-op_annual2)))
-        col3.metric('Payback Period (yrs)',"{:.2f}".format(float(st.session_state.cost)/(annual_cost1-annual_cost2)))
+        col1.metric('Payback Period (yrs)',"{:.2f}".format(epb))
+        col2.metric('Payback Period (yrs)',"{:.2f}".format(cpb))
+        col3.metric('Payback Period (yrs)',"{:.2f}".format(fpb))
         col1.metric('Return on Investment (%)', "{:.0f}".format(100*(((annual_kwh1-annual_kwh2)*yr-(em_energy2-em_energy1))/(em_energy2-em_energy1))))
         col2.metric('Return on Investment (%)', "{:.0f}".format(100*(total_carbon1-total_carbon2)/(em_carbon2-em_carbon1)))
         col3.metric('Return on Investment (%)', "{:.0f}".format(100*((life_cost1-life_cost2)-float(st.session_state.cost))/(float(st.session_state.cost))))
